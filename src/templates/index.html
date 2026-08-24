@@ -3,103 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALTEREGO - Feed Simülasyonu</title>
+    <title>ALTEREGO v0.4 - Akıllı Simülasyon</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { display: flex; gap: 30px; max-width: 1000px; width: 100%; }
-        
-        /* Sol Taraf: Sosyal Medya Akışı */
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { display: flex; gap: 30px; max-width: 1100px; width: 100%; }
         .feed { flex: 2; height: 90vh; overflow-y: auto; padding-right: 10px; }
-        .feed::-webkit-scrollbar { width: 8px; }
-        .feed::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 4px; }
-        .post { background: white; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .post-header { font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-        .avatar { width: 40px; height: 40px; background-color: #007bff; border-radius: 50%; display: inline-block; }
-        .post-img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; background-color: #ddd; margin-bottom: 10px; }
-        .post-btn { background: #f0f2f5; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; width: 100%; }
+        .post { background: white; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative;}
+        .post-img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+        .post-btn { background: #f0f2f5; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
         .post-btn:hover { background: #e4e6e9; }
-        .post-btn.liked { background: #e7f3ff; color: #007bff; }
-
-        /* Sağ Taraf: ALTEREGO Paneli */
-        .dashboard { flex: 1; background: white; border-radius: 12px; padding: 20px; height: fit-content; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 20px; }
-        .score-box { background: #2c3e50; color: white; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; transition: background 0.3s; }
+        .ai-label { font-size: 11px; background: #e8f0fe; color: #1a73e8; padding: 4px 8px; border-radius: 4px; position: absolute; top: 15px; right: 15px; font-weight: bold;}
+        .ai-label.negative { background: #fce8e6; color: #d93025; }
+        
+        .dashboard { flex: 1.2; background: white; border-radius: 12px; padding: 20px; height: fit-content; position: sticky; top: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+        .score-box { background: #2c3e50; color: white; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 15px; transition: 0.3s; }
         .score-box h2 { margin: 0; font-size: 32px; }
-        .score-box p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.8; }
-        .stat-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; font-weight: bold; }
-        .bar-bg { background: #e4e6e9; height: 10px; border-radius: 5px; width: 100%; margin-bottom: 15px; overflow: hidden; }
+        .stat-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-bottom: 5px;}
+        .bar-bg { background: #e4e6e9; height: 8px; border-radius: 4px; margin-bottom: 15px; overflow: hidden; }
         .bar-fill { background: #007bff; height: 100%; transition: width 0.3s; }
+        .simulate-btn { background: #7b1fa2; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.2s;}
+        .simulate-btn:hover { background: #4a148c; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- SOSYAL MEDYA AKIŞI -->
-    <div class="feed" id="feed-container">
-        <!-- Postlar JavaScript ile buraya eklenecek -->
-    </div>
+    <div class="feed" id="feed-container"></div>
 
-    <!-- ALTEREGO DİJİTAL İKİZ PANELİ -->
     <div class="dashboard">
-        <h3 style="margin-top: 0;">My Digital Mirror</h3>
+        <h3 style="margin-top: 0;">Dijital Aynam & Gelecek</h3>
         <div class="score-box" id="score-box">
             <h2 id="iai-score">--</h2>
-            <p>Intent Alignment Index (IAI)</p>
+            <p>Uyum Skoru (IAI)</p>
         </div>
-        <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Platform algoritmasının seni hedeflerinden ne kadar uzaklaştırdığını gösterir.</p>
         
-        <div id="stats-container">
-            <!-- Barlar JavaScript ile eklenecek -->
-        </div>
+        <div id="stats-container"></div>
+
+        <button class="simulate-btn" onclick="simulateFuture()">🔮 30 Günlük Gelecekteki Akışımı Gör (FAS)</button>
+        <div id="future-results" style="margin-top: 15px; font-size: 13px; font-weight: bold; color: #7b1fa2; display: none;"></div>
     </div>
 </div>
 
 <script>
     let userId = "";
 
-    // Kategoriler ve sahte içerikler
-    const contentDB = [
-        { cat: "Science", title: "CERN'de yeni bir parçacık keşfi ihtimali!", img: "https://picsum.photos/400/250?random=1" },
-        { cat: "Technology", title: "Yapay Zeka modelleri artık kendi kodlarını yazıyor.", img: "https://picsum.photos/400/250?random=2" },
-        { cat: "Education", title: "Python ile Algoritma Geliştirme Eğitimi - Bölüm 1", img: "https://picsum.photos/400/250?random=3" },
-        { cat: "Entertainment", title: "İnternetin en komik kedi videoları derlemesi 😹", img: "https://picsum.photos/400/250?random=4" },
-        { cat: "Sports", title: "Şampiyonlar Ligi'nde inanılmaz geri dönüş!", img: "https://picsum.photos/400/250?random=5" }
-    ];
-
-    // Sayfa açıldığında kullanıcıyı başlat
     fetch('/init_user')
         .then(res => res.json())
         .then(data => {
             userId = data.user_id;
             updateDashboard(data.iai, data.state);
-            generateFeed();
+            loadFeed();
         });
 
-    function generateFeed() {
-        const feed = document.getElementById('feed-container');
-        // Rastgele 15 tane post üret
-        for(let i=0; i<15; i++) {
-            const randomContent = contentDB[Math.floor(Math.random() * contentDB.length)];
-            const postHTML = `
-                <div class="post">
-                    <div class="post-header">
-                        <div class="avatar"></div>
-                        <span>@${randomContent.cat}_Gundemi</span>
+    function loadFeed() {
+        fetch('/get_feed', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: userId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            const feed = document.getElementById('feed-container');
+            feed.innerHTML = "";
+            data.feed.forEach(item => {
+                let labelClass = item.impact === "Negatif" ? "ai-label negative" : "ai-label";
+                let labelText = `ARS Puanı: ${item.ars} | Gelecek Etkisi: ${item.impact}`;
+                
+                feed.innerHTML += `
+                    <div class="post">
+                        <div class="${labelClass}">${labelText}</div>
+                        <img class="post-img" src="${item.post.img}" alt="Resim">
+                        <h4 style="margin: 10px 0;">[${item.post.cat}] ${item.post.title}</h4>
+                        <button class="post-btn" onclick="likePost(this, '${item.post.cat}')">👍 Beğen</button>
                     </div>
-                    <img class="post-img" src="${randomContent.img}" alt="Resim">
-                    <h4 style="margin: 10px 0;">${randomContent.title}</h4>
-                    <button class="post-btn" onclick="likePost(this, '${randomContent.cat}')">👍 Beğen ve Etkileşime Gir</button>
-                </div>
-            `;
-            feed.innerHTML += postHTML;
-        }
+                `;
+            });
+        });
     }
 
-    function likePost(buttonElement, category) {
-        if(buttonElement.classList.contains('liked')) return; // Zaten beğenildiyse çık
-        buttonElement.classList.add('liked');
-        buttonElement.innerText = "Beğenildi";
-
-        // Backend'e bildir
+    function likePost(btn, category) {
+        btn.innerText = "Beğenildi";
+        btn.style.background = "#e7f3ff";
+        btn.style.color = "#007bff";
+        
         fetch('/interact', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -108,28 +94,45 @@
         .then(res => res.json())
         .then(data => {
             updateDashboard(data.new_iai, data.new_state);
+            // Akışı yeni profile göre yeniden sıralamak için güncelleyebiliriz
+            setTimeout(loadFeed, 500); 
         });
     }
 
     function updateDashboard(iai, state) {
         document.getElementById('iai-score').innerText = iai.toFixed(1);
-        
-        // Skor rengini ayarla (Drift tespiti)
         const scoreBox = document.getElementById('score-box');
-        if (iai < 60) { scoreBox.style.background = '#e74c3c'; } // Kırmızı
-        else if (iai < 80) { scoreBox.style.background = '#f39c12'; } // Turuncu
-        else { scoreBox.style.background = '#2c3e50'; } // Normal Mavi-Gri
+        if (iai < 60) scoreBox.style.background = '#e74c3c';
+        else if (iai < 80) scoreBox.style.background = '#f39c12';
+        else scoreBox.style.background = '#2c3e50';
 
         const statsDiv = document.getElementById('stats-container');
         statsDiv.innerHTML = "";
-        
         for (const [cat, value] of Object.entries(state)) {
-            const percentage = (value * 100).toFixed(1);
+            let percentage = (value * 100).toFixed(1);
             statsDiv.innerHTML += `
                 <div class="stat-row"><span>${cat}</span> <span>%${percentage}</span></div>
                 <div class="bar-bg"><div class="bar-fill" style="width: ${percentage}%"></div></div>
             `;
         }
+    }
+
+    function simulateFuture() {
+        const btn = document.querySelector('.simulate-btn');
+        btn.innerText = "Simüle ediliyor...";
+        
+        fetch('/simulate_future', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: userId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.innerText = "🔮 30 Günlük Gelecekteki Akışımı Gör (FAS)";
+            const resDiv = document.getElementById('future-results');
+            resDiv.style.display = "block";
+            resDiv.innerHTML = `Eğer mevcut alışkanlıklarınla devam edersen 30 etkileşim sonra Gelecek Uyum Skorun (FAS): <span style="font-size:18px;">${data.fas.toFixed(1)}</span> olacak.`;
+        });
     }
 </script>
 
