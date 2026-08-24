@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALTEREGO v0.2</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f9; padding: 20px; }
+        .card { background: white; padding: 20px; margin: 10px auto; width: 300px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; }
+        .card:hover { transform: scale(1.05); }
+        #score-board { margin-bottom: 30px; padding: 20px; background: #2c3e50; color: white; border-radius: 10px; display: inline-block; }
+    </style>
+</head>
+<body>
+
+    <h1>ALTEREGO Sosyal Medya Simülasyonu</h1>
+    
+    <div id="score-board">
+        <h2>Uyum Skoru (IAI): <span id="iai-score">{{ current_iai|round(2) }}</span> / 100</h2>
+        <p><em>Kullanıcının bilinçli hedefi ile algoritmanın sunduğu içerik uyumu</em></p>
+    </div>
+
+    <h3>Akışına Düşen İçerikler (Etkileşime geçmek için tıkla)</h3>
+    <div id="feed">
+        <div class="card" onclick="interact('Science')">🔬 Bilim Haberi Okuyun</div>
+        <div class="card" onclick="interact('Technology')">💻 Yeni Yapay Zeka Aracı İncele</div>
+        <div class="card" onclick="interact('Education')">📚 Kodlama Dersi İzle</div>
+        <div class="card" onclick="interact('Entertainment')">😂 Komik Kedi Videosu İzle</div>
+        <div class="card" onclick="interact('Sports')">⚽ Maç Özetlerini İzle</div>
+    </div>
+
+    <script>
+        function interact(category) {
+            fetch('/interact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ category: category })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('iai-score').innerText = data.new_iai;
+                // Skora göre renk değiştirme efekti eklenebilir
+                if(data.new_iai < 60) { document.getElementById('score-board').style.backgroundColor = '#c0392b'; }
+                else { document.getElementById('score-board').style.backgroundColor = '#2c3e50'; }
+            });
+        }
+    </script>
+</body>
+</html>
